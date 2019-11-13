@@ -1,6 +1,6 @@
 def suiteYml = "indy.yml"
 def concurrency=2
-def templateFile="/mnt/indy-test-templates/indy-perf-tester-template.yml"
+def templateFile="/mnt/indy-test-templates/indy-perf-tester-template.json"
 
 
 pipeline {

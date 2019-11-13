@@ -12,7 +12,9 @@ pipeline {
                     openshift.withCluster() {
                         openshift.withProject() {
                             echo "Reading template: ${templateFile}"
-                            def objs = openshift.process(readFile(file: templateFile), "-p", "SUITE_YML=${suiteYml}", "BUILDERS=${concurrency}")
+                            def templateTxt = readFile(file: templateFile)
+                            echo "Read template:\n\n${templateTxt}"
+                            def objs = openshift.process(templateTxt, "-p", "SUITE_YML=${suiteYml}", "BUILDERS=${concurrency}")
                             def created = openshift.create(objs)
 
                             created.withEach{

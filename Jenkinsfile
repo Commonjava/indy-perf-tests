@@ -4,7 +4,7 @@ def builders=6
 
 def cmName = 'indy-perf-tester-suites'
 def suitesDir = "suites"
-def templateFile="indy-perf-tester-template.yml"
+def templateFile="indy-perf-tester-template.json"
 
 def suiteNames = []
 def suites = [:]
@@ -25,11 +25,11 @@ pipeline {
                     openshift.withCluster() {
                         openshift.withProject() {
                             echo "Reading template: ${templateFile}"
-                            def templateYml = readYaml(file: templateFile)
-                            echo "Read template:\n\n${templateYml}"
+                            def templateJson = readJson(file: templateFile)
+                            echo "Read template:\n\n${templateJson}"
 
 
-                            def objs = openshift.process(templateYml, "-p", "SUITE_YML=${suite}", "BUILDERS=${builders}", "JOB_NAME=${env.BUILD_NAME}")
+                            def objs = openshift.process(templateJson, "-p", "SUITE_YML=${suite}", "BUILDERS=${builders}", "JOB_NAME=${env.BUILD_NAME}")
 
                             objs.each{
                                 it.describe()

@@ -31,7 +31,7 @@ pipeline {
                             echo "Read+patched template:\n\n${templateJson}"
 
 
-                            def objs = openshift.process(templateJson, "-p", "SUITE_YML=${suite}", "BUILDERS=${builders}", "JOB_NAME=${env.BUILD_TAG")
+                            def objs = openshift.process(templateJson, "-p", "SUITE_YML=${suite}", "BUILDERS=${builders}", "JOB_NAME=${env.BUILD_TAG}")
                             echo "Got ${objs.size()} objects from processed template:\n\n${objs}"
 
                             def created = openshift.create(objs)

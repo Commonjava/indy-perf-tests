@@ -4,7 +4,7 @@ def templateFile="indy-perf-tester-template.yml"
 
 def suiteNames = []
 def suites = [:]
-def foundFiles = findFiles(glob: suitesDir + '/*.yml')
+def foundFiles = sh(script: "ls -1 ${suitesDir}/*.yml", returnStdout: true).split()
 foundFiles.each{
     suiteNames << it
     suites[it] = readYaml(file: "${suitesDir}/${it}")

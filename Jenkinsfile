@@ -15,12 +15,13 @@ pipeline {
         stage('Create/Start Performance Test Environment') {
             steps {
                 script {
-                    def foundFiles = sh(script: "ls -1 ${suitesDir}/*.yml", returnStdout: true).split()
+                    def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
                     foundFiles.each{
-                        suiteNames << it
-                        suites[it] = readYaml(file: "${suitesDir}/${it}")
+                        def fname = it.split()[-1]
+                        suiteNames << fname
+                        suites[fname] = readYaml(file: "${suitesDir}/${fname}")
                     }
-                    
+
                     openshift.withCluster() {
                         openshift.withProject() {
                             echo "Deleting ConfigMap containing suite definitions"

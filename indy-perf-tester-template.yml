@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: indy-perf-tester
+  singularName: indy-perf-tester
+  labels:
+    app: indy-perf-tester
+    lc_stage: perftest
+    lc_unit: testsuite
+  annotations:
+    tags: "indy,java,perftest,test,testjob"
+
+objects:
+  - kind: configMap
+    metadata:
+      name: "indy-perf-tester-suites-${INSTANCE_SUFFIX}"
+      labels:
+        app: indy-perf-tester
+        instance: "${INSTANCE_SUFFIX}"
+        job_name: "${JOB_NAME}"
+    data:
+      dummy.yml: |+
+        foo: This is just a placeholder
+
+  - kind: PersistentVolumeClaim
+    metadata:
+      name: "indy-perf-tester-builds-${INSTANCE_SUFFIX}"
+      labels:
+        app: indy-perf-tester
+        instance: "${INSTANCE_SUFFIX}"
+        job_name: "${JOB_NAME}"
+    spec:
+      accessModes:
+      - ReadWriteMany
+      resources:
+        requests:
+          storage: "${STORAGE_SIZE}"
+
+  - kind: Job
+    metadata:
+      name: indy-perf-tester
+      labels:
+        app: indy-perf-tester
+        instance: "${INSTANCE_SUFFIX}"
+        job_name: "${JOB_NAME}"
+    spec:
+      parallelism: "${BUILDERS}"
+      completions: "${BUILDERS}"
+
+      selector:
+        matchLabels:
+          app: indy-perf-tester
+      serviceName: indy-perf-tester
+      spec:
+        containers:
+          - name: builder
+            image: quay.io/factory2/indy-perf-tester:latest
+
+            envFrom:
+              - configMapRef:
+                  name: indy-perftest-setup
+
+            env:
+              - name: JOB_NAME
+                value: "${JOB_NAME}"
+
+              - name: BUILDERS
+                value: "${BUILDERS}"
+
+              - name: INDY_URL
+                value: "${INDY_URL}"
+
+              - name: SUITE_YML
+                value: "${SUITE_YML}"
+
+              - name: PROXY_PORT
+                value: "${PROXY_PORT}"
+
+              - name: SUITE_CATALOG_DIR
+                value: "${SUITE_CATALOG_DIR}"
+
+              - name: NODENAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+
+            resources:
+              requests:
+                cpu: 2
+                memory: 2000Mi
+              limits:
+                cpu: 2
+                memory: 2000Mi
+
+            volumeMounts:
+              - name: vol-builds
+                mountPath: /build
+
+              - name: vol-suites
+                mountPath: "/suites"
+                readOnly: true
+
+            volumes:
+              - name: vol-builds
+                persistentVolumeClaim:
+                  claimName: "indy-perf-tester-builds-${INSTANCE_SUFFIX}"
+              - name: vol-suites
+                configMap:
+                  name: "indy-perf-tester-suites-${INSTANCE_SUFFIX}"
+                  defaultMode: 420
+
+
+parameters:
+  - name: JOB_NAME
+    description: Jenkins performance test execution build name
+
+  - name: INSTANCE_SUFFIX
+    description: Generated suffix used to make names specific to the new instance
+    from: "[a-zA-Z0-9]{7}"
+    generate: expression
+
+  - name: INDY_URL
+    description: The URL to the Indy instance to target during test suite execution
+    value: "http://indy-perf-nos-automation.svc.cluster.local/"
+
+  - name: SUITE_YML
+    description: The suite YAML filename which should be executed (from the suite catalog configmap)
+
+  - name: BUILDERS
+    description: The number of builders to run (corresponds to concurrency)
+
+  - name: PROXY_PORT
+    description: The port for Indy generic proxy (defaults to 8081)
+    value: 8081
+
+  - name: STORAGE_SIZE
+    description: The size of the shared build output storage volume
+    value: "10Gi"

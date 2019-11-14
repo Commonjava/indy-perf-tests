@@ -25,7 +25,7 @@ pipeline {
                     openshift.withCluster() {
                         openshift.withProject() {
                             echo "Reading template: ${templateFile}"
-                            def templateJson = readJson(file: templateFile)
+                            def templateJson = readJSON(file: templateFile)
                             echo "Read template:\n\n${templateJson}"
 
 

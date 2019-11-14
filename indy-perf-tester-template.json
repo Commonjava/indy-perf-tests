@@ -123,17 +123,6 @@
                     "memory": "2000Mi"
                   }
                 },
-                "volumeMounts": [
-                  {
-                    "name": "vol-builds",
-                    "mountPath": "/build"
-                  },
-                  {
-                    "name": "vol-suites",
-                    "mountPath": "/suites",
-                    "readOnly": true
-                  }
-                ],
                 "volumes": [
                   {
                     "name": "vol-builds",
@@ -146,6 +135,17 @@
                     "configMap": {
                       "name": "indy-perf-tester-suites-${INSTANCE_SUFFIX}"
                     }
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "name": "vol-builds",
+                    "mountPath": "/build"
+                  },
+                  {
+                    "name": "vol-suites",
+                    "mountPath": "/suites",
+                    "readOnly": true
                   }
                 ]
               }

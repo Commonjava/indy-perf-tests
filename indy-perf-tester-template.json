@@ -15,7 +15,7 @@
   },
   "objects": [
     {
-      "kind": "configMap",
+      "kind": "ConfigMap",
       "metadata": {
         "name": "indy-perf-tester-suites-${INSTANCE_SUFFIX}",
         "labels": {

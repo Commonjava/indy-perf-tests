@@ -4,11 +4,10 @@ def templateFile="indy-perf-tester-template.yml"
 
 def suiteNames = []
 def suites = [:]
-new File(suitesDir).list().each{
-    if (!new File(suitesDir, it).isDirectory() ) {
-        suiteNames << it
-        suites[it] = readYaml(file: "${suitesDir}/${it}")
-    }
+def foundFiles = findFiles(glob: suitesDir + '/*.yml')
+foundFiles.each{
+    suiteNames << it
+    suites[it] = readYaml(file: "${suitesDir}/${it}")
 }
 
 pipeline {

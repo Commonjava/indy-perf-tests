@@ -30,10 +30,6 @@ pipeline {
 
 
                             def objs = openshift.process(templateJson, "-p", "SUITE_YML=${suite}", "BUILDERS=${builders}", "JOB_NAME=${env.BUILD_NAME}")
-
-                            objs.each{
-                                it.describe()
-                            }
                             def created = openshift.create(objs)
 
                             created.withEach{

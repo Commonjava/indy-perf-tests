@@ -29,7 +29,7 @@ pipeline {
 
                             echo "Reading template: ${templateFile}"
                             def templateYml = readYaml(file: templateFile)
-                            echo "Read template:\n\n${templateTxt}"
+                            echo "Read template:\n\n${templateYml}"
 
 
                             def objs = openshift.process(templateYml, "-p", "SUITE_YML=${suite}", "BUILDERS=${builders}", "JOB_NAME=${env.BUILD_NAME}")

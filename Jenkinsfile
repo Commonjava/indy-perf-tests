@@ -17,7 +17,7 @@ pipeline {
                 script {
                     def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
                     foundFiles.each{
-                        def fname = it.split()[-1]
+                        def fname = it.name
                         suiteNames << fname
                         suites[fname] = readYaml(file: "${suitesDir}/${fname}")
                     }

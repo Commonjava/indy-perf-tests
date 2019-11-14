@@ -24,9 +24,6 @@ pipeline {
 
                     openshift.withCluster() {
                         openshift.withProject() {
-                            echo "Deleting ConfigMap containing suite definitions"
-                            openshift.selector("configmap", cmName).delete()
-
                             echo "Reading template: ${templateFile}"
                             def templateYml = readYaml(file: templateFile)
                             echo "Read template:\n\n${templateYml}"

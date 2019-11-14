@@ -4,14 +4,16 @@ def templateFile="indy-perf-tester-template.yml"
 
 def suiteNames = []
 def suites = [:]
-def foundFiles = sh(script: "ls -1 ${suitesDir}/*.yml", returnStdout: true).split()
-foundFiles.each{
-    suiteNames << it
-    suites[it] = readYaml(file: "${suitesDir}/${it}")
-}
 
 pipeline {
     agent { label 'python' }
+    script {
+        def foundFiles = sh(script: "ls -1 ${suitesDir}/*.yml", returnStdout: true).split()
+        foundFiles.each{
+            suiteNames << it
+            suites[it] = readYaml(file: "${suitesDir}/${it}")
+        }
+    }
     parameters {
         choice(name: 'SUITE_YML', choices: suiteNames, description: "Which performance test suite do you want to run?")
         string(name: 'BUILDERS', defaultValue: '6', description: "How many concurrent builds should we run?")

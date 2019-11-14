@@ -74,6 +74,7 @@
                 "instance": "${INSTANCE_SUFFIX}",
                 "job_name": "${JOB_NAME}"
               }
+            },
             "containers": [
               {
                 "name": "builder",

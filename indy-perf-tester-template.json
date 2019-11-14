@@ -163,7 +163,7 @@
     {
       "name": "INSTANCE_SUFFIX",
       "description": "Generated suffix used to make names specific to the new instance",
-      "from": "[a-zA-Z0-9]{7}",
+      "from": "[a-f0-9]{7}",
       "generate": "expression"
     },
     {

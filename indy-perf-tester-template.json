@@ -15,6 +15,7 @@
   },
   "objects": [
     {
+      "apiVersion": "v1",
       "kind": "ConfigMap",
       "metadata": {
         "name": "indy-perf-tester-suites-${INSTANCE_SUFFIX}",
@@ -29,6 +30,7 @@
       }
     },
     {
+      "apiVersion": "v1",
       "kind": "PersistentVolumeClaim",
       "metadata": {
         "name": "indy-perf-tester-builds-${INSTANCE_SUFFIX}",
@@ -50,6 +52,7 @@
       }
     },
     {
+      "apiVersion": "v1",
       "kind": "Job",
       "metadata": {
         "name": "indy-perf-tester",
@@ -73,13 +76,6 @@
             {
               "name": "builder",
               "image": "quay.io/factory2/indy-perf-tester:latest",
-              "envFrom": [
-                {
-                  "configMapRef": {
-                    "name": "indy-perftest-setup"
-                  }
-                }
-              ],
               "env": [
                 {
                   "name": "JOB_NAME",

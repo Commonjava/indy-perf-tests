@@ -26,12 +26,15 @@ pipeline {
                         openshift.withProject() {
                             echo "Reading template: ${templateFile}"
                             def templateJson = readJSON(file: templateFile)
-                            echo "Read template:\n\n${templateJson}"
+                            templateJson['objects'][0]['data'] = suites
+
+                            echo "Read+patched template:\n\n${templateJson}"
 
 
                             def objs = openshift.process(templateJson, "-p", "SUITE_YML=${suite}", "BUILDERS=${builders}", "JOB_NAME=${env.BUILD_NAME}")
-                            def created = openshift.create(objs)
+                            echo "Got ${objs.size()} objects from processed template:\n\n${objs}"
 
+                            def created = openshift.create(objs)
                             created.withEach{
                                 echo "Created ${it.kind()}:${it.name()}"
                             }

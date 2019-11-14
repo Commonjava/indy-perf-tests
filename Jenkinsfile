@@ -19,7 +19,7 @@ pipeline {
                     foundFiles.each{
                         def fname = it.name
                         suiteNames << fname
-                        suites[fname] = readYaml(file: "${suitesDir}/${fname}")
+                        suites[fname] = readFile(file: "${suitesDir}/${fname}")
                     }
 
                     openshift.withCluster() {

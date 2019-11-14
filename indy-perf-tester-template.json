@@ -55,7 +55,7 @@
       "apiVersion": "batch/v1",
       "kind": "Job",
       "metadata": {
-        "name": "indy-perf-tester",
+        "name": "indy-perf-tester-${INSTANCE_SUFFIX}",
         "labels": {
           "app": "indy-perf-tester",
           "instance": "${INSTANCE_SUFFIX}",
@@ -65,88 +65,92 @@
       "spec": {
         "parallelism": "${BUILDERS}",
         "completions": "${BUILDERS}",
-        "selector": {
-          "matchLabels": {
-            "app": "indy-perf-tester"
-          }
-        },
-        "serviceName": "indy-perf-tester",
-        "spec": {
-          "containers": [
-            {
-              "name": "builder",
-              "image": "quay.io/factory2/indy-perf-tester:latest",
-              "env": [
-                {
-                  "name": "JOB_NAME",
-                  "value": "${JOB_NAME}"
-                },
-                {
-                  "name": "BUILDERS",
-                  "value": "${BUILDERS}"
-                },
-                {
-                  "name": "INDY_URL",
-                  "value": "${INDY_URL}"
-                },
-                {
-                  "name": "SUITE_YML",
-                  "value": "${SUITE_YML}"
-                },
-                {
-                  "name": "PROXY_PORT",
-                  "value": "${PROXY_PORT}"
-                },
-                {
-                  "name": "SUITE_CATALOG_DIR",
-                  "value": "${SUITE_CATALOG_DIR}"
-                },
-                {
-                  "name": "NODENAME",
-                  "valueFrom": {
-                    "fieldRef": {
-                      "fieldPath": "spec.nodeName"
+        "template":{
+          "spec": {
+            "metadata": {
+              "name": "indy-perf-tester-${INSTANCE_SUFFIX}",
+              "labels": {
+                "app": "indy-perf-tester",
+                "instance": "${INSTANCE_SUFFIX}",
+                "job_name": "${JOB_NAME}"
+              }
+            "containers": [
+              {
+                "name": "builder",
+                "image": "quay.io/factory2/indy-perf-tester:latest",
+                "env": [
+                  {
+                    "name": "JOB_NAME",
+                    "value": "${JOB_NAME}"
+                  },
+                  {
+                    "name": "BUILDERS",
+                    "value": "${BUILDERS}"
+                  },
+                  {
+                    "name": "INDY_URL",
+                    "value": "${INDY_URL}"
+                  },
+                  {
+                    "name": "SUITE_YML",
+                    "value": "${SUITE_YML}"
+                  },
+                  {
+                    "name": "PROXY_PORT",
+                    "value": "${PROXY_PORT}"
+                  },
+                  {
+                    "name": "SUITE_CATALOG_DIR",
+                    "value": "${SUITE_CATALOG_DIR}"
+                  },
+                  {
+                    "name": "NODENAME",
+                    "valueFrom": {
+                      "fieldRef": {
+                        "fieldPath": "spec.nodeName"
+                      }
                     }
                   }
-                }
-              ],
-              "resources": {
-                "requests": {
-                  "cpu": 2,
-                  "memory": "2000Mi"
-                },
-                "limits": {
-                  "cpu": 2,
-                  "memory": "2000Mi"
-                }
-              },
-              "volumeMounts": [
-                {
-                  "name": "vol-builds",
-                  "mountPath": "/build"
-                },
-                {
-                  "name": "vol-suites",
-                  "mountPath": "/suites",
-                  "readOnly": true
-                }
-              ],
-              "volumes": [
-                {
-                  "name": "vol-builds",
-                  "persistentVolumeClaim": {
-                    "claimName": "indy-perf-tester-builds-${INSTANCE_SUFFIX}"
+                ],
+                "resources": {
+                  "requests": {
+                    "cpu": 2,
+                    "memory": "2000Mi"
+                  },
+                  "limits": {
+                    "cpu": 2,
+                    "memory": "2000Mi"
                   }
                 },
-                {
-                  "name": "vol-suites",
-                  "configMap": {
-                    "name": "indy-perf-tester-suites-${INSTANCE_SUFFIX}"
+                "volumeMounts": [
+                  {
+                    "name": "vol-builds",
+                    "mountPath": "/build"
+                  },
+                  {
+                    "name": "vol-suites",
+                    "mountPath": "/suites",
+                    "readOnly": true
                   }
-                }
-              ]
-            }
-          ]
+                ],
+                "volumes": [
+                  {
+                    "name": "vol-builds",
+                    "persistentVolumeClaim": {
+                      "claimName": "indy-perf-tester-builds-${INSTANCE_SUFFIX}"
+                    }
+                  },
+                  {
+                    "name": "vol-suites",
+                    "configMap": {
+                      "name": "indy-perf-tester-suites-${INSTANCE_SUFFIX}"
+                    }
+                  }
+                ]
+              }
+            ],
+            "restartPolicy": "Never"
+          }
         }
       }
     }

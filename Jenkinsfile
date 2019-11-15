@@ -40,8 +40,9 @@ pipeline {
                     
                     echo "Running: ${params}"
 
-                    parallelStages = [1..params.BUILDERS].collectEntries {
-                        def builderName = "Builder ${it}"
+                    parallelStages = [:]
+                    for(idx in 1..params.BUILDERS) {
+                        def builderName = "Builder ${idx}"
                         [builderName: generateStage(builderName)]
                     }
                 }

@@ -18,6 +18,8 @@ def generateStage(builder, suiteYml, builders) {
     }
 }
 
+def parallelStages = [:]
+
 pipeline {
     agent { label 'python' }
     stages {
@@ -44,18 +46,21 @@ pipeline {
                     )
                     
                     echo "Running: ${params}"
-                    def suiteYml = readFile(file: "${suitesDir}/${params.SUITE_YML}")
+                    def suiteYmlSrc = readFile(file: "${suitesDir}/${params.SUITE_YML}")
 
-                    def parallelStages = [:]
-                    for(idx in 1..params.BUILDERS) {
-                        // stash name: "params." + idx, suite: suite, builders: params.BUILDERS, builder: idx 
-
+                    for(int i=1; i < Integer.parseInt(params.BUILDERS); i++) {
+                        def idx = i
                         def builderName = "Builder ${idx}"
+                        def suiteYml = suiteYmlSrc
+
                         parallelStages[builderName] = generateStage(idx, suiteYml, params.BUILDERS)
                     }
-
-                    parallel parallelStages
                 }
+            }
+        }
+        stage('Run Parallel Builds') {
+            script {
+                parallel parallelStages
             }
         }
     }

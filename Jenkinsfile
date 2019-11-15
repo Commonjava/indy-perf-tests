@@ -21,7 +21,7 @@ def generateStage(builder, suiteYml, builders) {
 def parallelStages = [:]
 
 pipeline {
-    agent { label 'python' }
+    agent
     stages {
         stage('Enter Parameters') {
             steps {
@@ -59,8 +59,10 @@ pipeline {
             }
         }
         stage('Run Parallel Builds') {
-            script {
-                parallel parallelStages
+            steps {
+                script {
+                    parallel parallelStages
+                }
             }
         }
     }

@@ -1,8 +1,3 @@
-def params = []
-def suitesDir = "suites"
-def suiteNames = []
-def parallelStages = [:]
-
 def generateStage(idx) {
     return {
         stage("Build ${idx}") {
@@ -26,6 +21,11 @@ pipeline {
         stage('Enter Parameters') {
             steps {
                 script {
+                    def params = []
+                    def suitesDir = "suites"
+                    def suiteNames = []
+                    def parallelStages = [:]
+
                     def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
                     foundFiles.each{
                         suiteNames << it.name

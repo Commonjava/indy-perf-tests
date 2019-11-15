@@ -12,43 +12,54 @@ def suites = [:]
 pipeline {
     agent { label 'python' }
     stages {
-        stage('Create/Start Performance Test Environment') {
-            steps {
-                script {
-                    def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
-                    foundFiles.each{
-                        def fname = it.name
-                        suiteNames << fname
-                        suites[fname] = readFile(file: "${suitesDir}/${fname}")
-                    }
+        stage('Enter Parameters') {
+            input(
+                message "Please enter parameters for this test:"
+                ok "Go"
+                parameters(
+                    choice(name: 'SUITE_YML', choices: suiteNames, description: "Test suite")
+                )
+            )
 
-                    openshift.withCluster() {
-                        openshift.withProject() {
-                            echo "Reading template: ${templateFile}"
-                            def templateJson = readJSON(file: templateFile)
-                            templateJson['objects'][0]['data'] = suites
-
-                            echo "Read+patched template:\n\n${templateJson}"
-
-
-                            def objs = openshift.process(templateJson, "-p", "SUITE_YML=${suite}", "BUILDERS=${builders}", "JOB_NAME=${env.BUILD_TAG}")
-                            echo "Got ${objs.size()} objects from processed template:\n\n${objs}"
-
-                            def created = null
-                            objs.each{
-                                echo "Creating: ${it['kind']}:${obj['metadata']['name']}"
-    
-                                created = openshift.create(it)
-    
-                                created.withEach{
-                                    echo "Created ${it.kind()}:${it.name()}"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            echo "Running: ${params.SUITE_YML}"
         }
+        // stage('Create/Start Performance Test Environment') {
+        //     steps {
+        //         script {
+        //             def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
+        //             foundFiles.each{
+        //                 def fname = it.name
+        //                 suiteNames << fname
+        //                 suites[fname] = readFile(file: "${suitesDir}/${fname}")
+        //             }
+
+        //             openshift.withCluster() {
+        //                 openshift.withProject() {
+        //                     echo "Reading template: ${templateFile}"
+        //                     def templateJson = readJSON(file: templateFile)
+        //                     templateJson['objects'][0]['data'] = suites
+
+        //                     echo "Read+patched template:\n\n${templateJson}"
+
+
+        //                     def objs = openshift.process(templateJson, "-p", "SUITE_YML=${suite}", "BUILDERS=${builders}", "JOB_NAME=${env.BUILD_TAG}")
+        //                     echo "Got ${objs.size()} objects from processed template:\n\n${objs}"
+
+        //                     def created = null
+        //                     objs.each{
+        //                         echo "Creating: ${it['kind']}:${obj['metadata']['name']}"
+    
+        //                         created = openshift.create(it)
+    
+        //                         created.withEach{
+        //                             echo "Created ${it.kind()}:${it.name()}"
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
 

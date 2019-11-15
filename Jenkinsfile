@@ -31,13 +31,18 @@ node('python') {
 
         echo "Got suite names: ${suiteNames}"
         
-        params = input(
-            message: "Please enter parameters for this test:",
-            parameters:[
-                choice(name: 'SUITE_YML', choices: suiteNames, description: "Test suite"),
-                string(name: 'BUILDERS', defaultValue: '2', description: 'Number of concurrent builds')
-            ]
-        )
+        // params = input(
+        //     message: "Please enter parameters for this test:",
+        //     parameters:[
+        //         choice(name: 'SUITE_YML', choices: suiteNames, description: "Test suite"),
+        //         string(name: 'BUILDERS', defaultValue: '2', description: 'Number of concurrent builds')
+        //     ]
+        // )
+
+        params = [
+            'SUITE_YML': 'indy.yml',
+            'BUILDERS': 2
+        ]
         
         echo "Running: ${params}"
         def suiteYmlSrc = readFile(file: "${suitesDir}/${params.SUITE_YML}")

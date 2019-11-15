@@ -21,7 +21,9 @@ pipeline {
                 )
             )
 
-            echo "Running: ${params.SUITE_YML}"
+            steps {
+                echo "Running: ${params.SUITE_YML}"
+            }
         }
         // stage('Create/Start Performance Test Environment') {
         //     steps {

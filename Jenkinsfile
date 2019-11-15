@@ -3,15 +3,18 @@ def suitesDir = "suites"
 def suiteNames = []
 def parallelStages = [:]
 
-def generateStage(job) {
+def generateStage(idx) {
     return {
-        stage("Build ${job}") {
+        stage("Build ${idx}") {
             agent {
                 label 'python'
             }
             steps {
-                echo "This is ${job}"
-                sh script: "sleep 15"
+                script {
+                    unstash 'params'
+                    echo "This is builder #${idx}"
+                    sh script: "sleep 15"
+                }
             }
         }
     }
@@ -39,11 +42,14 @@ pipeline {
                     )
                     
                     echo "Running: ${params}"
+                    def suite = readFile(file: "${suitesDir}/${params.SUITE_YML}")
 
                     parallelStages = [:]
                     for(idx in 1..params.BUILDERS) {
+                        stash name: params + "." + idx, suite: suite, builders: params.BUILDERS, builder: idx 
+
                         def builderName = "Builder ${idx}"
-                        parallelStages[builderName] = generateStage(builderName)
+                        parallelStages[builderName] = generateStage(idx)
                     }
                 }
             }

@@ -18,6 +18,8 @@ def generateStage(builder, suiteYml, builders) {
     }
 }
 
+def parallelStages = [:]
+
 pipeline {
     agent { label 'python' }
     stages {
@@ -27,7 +29,6 @@ pipeline {
                     def params = []
                     def suitesDir = "suites"
                     def suiteNames = []
-                    def parallelStages = [:]
 
                     def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
                     foundFiles.each{

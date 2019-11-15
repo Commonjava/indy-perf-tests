@@ -43,7 +43,7 @@ pipeline {
                     parallelStages = [:]
                     for(idx in 1..params.BUILDERS) {
                         def builderName = "Builder ${idx}"
-                        [builderName: generateStage(builderName)]
+                        parallelStages[builderName] = generateStage(builderName)
                     }
                 }
             }

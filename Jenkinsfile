@@ -6,7 +6,7 @@ def generateStage(idx) {
             }
             steps {
                 script {
-                    unstash 'params'
+                    unstash 'params.' + idx
                     echo "This is builder #${idx}"
                     sh script: "sleep 15"
                 }
@@ -46,7 +46,7 @@ pipeline {
 
                     parallelStages = [:]
                     for(idx in 1..params.BUILDERS) {
-                        stash name: params + "." + idx, suite: suite, builders: params.BUILDERS, builder: idx 
+                        stash name: "params." + idx, suite: suite, builders: params.BUILDERS, builder: idx 
 
                         def builderName = "Builder ${idx}"
                         parallelStages[builderName] = generateStage(idx)

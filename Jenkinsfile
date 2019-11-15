@@ -3,11 +3,6 @@ def suitesDir = "suites"
 def suiteNames = []
 def parallelStages = [:]
 
-def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
-foundFiles.each{
-    suiteNames << it.name
-}
-
 def generateStage(job) {
     return {
         stage("Build ${job}") {
@@ -28,6 +23,11 @@ pipeline {
         stage('Enter Parameters') {
             steps {
                 script {
+                    def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
+                    foundFiles.each{
+                        suiteNames << it.name
+                    }
+
                     echo "Got suite names: ${suiteNames}"
                     
                     params = input(

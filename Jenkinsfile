@@ -21,7 +21,7 @@ def generateStage(builder, suiteYml, builders) {
 def parallelStages = [:]
 
 pipeline {
-    agent
+    agent { label 'python' }
     stages {
         stage('Enter Parameters') {
             steps {

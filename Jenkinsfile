@@ -1,13 +1,16 @@
-def generateStage(idx) {
+def generateStage(builder, suiteYml, builders) {
     return {
-        stage("Build ${idx}") {
+        stage("Build " + builder) {
             agent {
                 label 'python'
             }
             steps {
                 script {
-                    unstash 'params.' + idx
-                    echo "This is builder #${idx}"
+                    echo "This is builder #${builder} out of ${builders}"
+                    def suite = readYaml string: suiteYml
+                    echo "Suite YAML parsed to:\n\n${suite}"
+
+                    echo "Sleeping 15s"
                     sh script: "sleep 15"
                 }
             }
@@ -42,14 +45,14 @@ pipeline {
                     )
                     
                     echo "Running: ${params}"
-                    def suite = readFile(file: "${suitesDir}/${params.SUITE_YML}")
+                    def suiteYml = readFile(file: "${suitesDir}/${params.SUITE_YML}")
 
                     parallelStages = [:]
                     for(idx in 1..params.BUILDERS) {
-                        stash name: "params." + idx, suite: suite, builders: params.BUILDERS, builder: idx 
+                        // stash name: "params." + idx, suite: suite, builders: params.BUILDERS, builder: idx 
 
                         def builderName = "Builder ${idx}"
-                        parallelStages[builderName] = generateStage(idx)
+                        parallelStages[builderName] = generateStage(idx, suiteYml, params.BUILDERS)
                     }
                 }
             }

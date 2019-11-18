@@ -32,7 +32,7 @@ pipeline {
             parallel {
                 stage("Builder 1") {
                     agent {
-                        label 'python'
+                        label 'indyperf'
                     }
                     steps {
                         script {
@@ -40,14 +40,13 @@ pipeline {
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            echo "Sleeping 15s"
-                            sh script: "sleep 15"
+                            sh script: "run-test --help"
                         }
                     }
                 }
                 stage("Builder 2") {
                     agent {
-                        label 'python'
+                        label 'indyperf'
                     }
                     steps {
                         script {
@@ -55,8 +54,7 @@ pipeline {
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            echo "Sleeping 15s"
-                            sh script: "sleep 15"
+                            sh script: "run-test --help"
                         }
                     }
                 }

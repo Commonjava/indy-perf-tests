@@ -2,6 +2,7 @@ def params = []
 def suitesDir = "suites"
 def suiteNames = []
 def builders = 2
+def suiteYml = null
 
 pipeline {
     agent { label 'python' }
@@ -23,6 +24,9 @@ pipeline {
                             choice(name: 'SUITE_YML', choices: suiteNames, description: "Test suite"),
                         ]
                     )
+
+                    echo "Got params: ${params}"
+                    suiteYml = params[SUITE_YML]
                 }
             }
         }
@@ -35,7 +39,7 @@ pipeline {
                     steps {
                         script {
                             echo "This is builder #1 out of ${builders}"
-                            def suite = readYaml file: "${suitesDir}/${params.SUITE_YML}"
+                            def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
                             echo "Sleeping 15s"
@@ -43,14 +47,14 @@ pipeline {
                         }
                     }
                 }
-                stage("Builder 1") {
+                stage("Builder 2") {
                     agent {
                         label 'python'
                     }
                     steps {
                         script {
                             echo "This is builder #2 out of ${builders}"
-                            def suite = readYaml file: "${suitesDir}/${params.SUITE_YML}"
+                            def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
                             echo "Sleeping 15s"

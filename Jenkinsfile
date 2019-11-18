@@ -18,15 +18,12 @@ pipeline {
 
                     echo "Got suite names: ${suiteNames}"
                     
-                    params = input(
-                        message: "Please enter parameters for this test:",
+                    suiteYml = input(
+                        message: "Please enter a test suite to run:",
                         parameters:[
                             choice(name: 'SUITE_YML', choices: suiteNames, description: "Test suite"),
                         ]
                     )
-
-                    echo "Got params: ${params}"
-                    suiteYml = params[SUITE_YML]
                 }
             }
         }

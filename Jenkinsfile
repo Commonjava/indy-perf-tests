@@ -23,8 +23,6 @@ pipeline {
                             choice(name: 'SUITE_YML', choices: suiteNames, description: "Test suite"),
                         ]
                     )
-
-                    params['BUILDERS'] = builders
                 }
             }
         }

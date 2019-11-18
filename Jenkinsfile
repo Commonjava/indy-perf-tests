@@ -10,6 +10,7 @@ pipeline {
         stage('Enter Parameters') {
             steps {
                 script {
+                    sh script: "rpm -qa | grep python"
 
                     def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
                     foundFiles.each{

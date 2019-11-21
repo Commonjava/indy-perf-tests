@@ -36,11 +36,13 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "This is builder #1 out of ${builders}"
+                            def builder_idx = 0
+
+                            echo "This is builder #${builder_idx} out of ${builders}"
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            sh script: "run-test --help"
+                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
                         }
                     }
                 }
@@ -50,11 +52,13 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "This is builder #2 out of ${builders}"
+                            def builder_idx = 1
+
+                            echo "This is builder #${builder_idx} out of ${builders}"
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            sh script: "run-test --help"
+                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
                         }
                     }
                 }

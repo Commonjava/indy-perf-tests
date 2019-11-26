@@ -1,7 +1,7 @@
 def params = []
 def suitesDir = "suites"
 def suiteNames = []
-def builders = 2
+def builders = 6
 def suiteYml = null
 
 pipeline {
@@ -51,6 +51,70 @@ pipeline {
                     steps {
                         script {
                             def builder_idx = 1
+
+                            echo "This is builder #${builder_idx} out of ${builders}"
+                            def suite = readYaml file: "${suitesDir}/${suiteYml}"
+                            echo "Suite YAML parsed to:\n\n${suite}"
+
+                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                        }
+                    }
+                }
+                stage("Builder 3") {
+                    agent {
+                        label 'indyperf'
+                    }
+                    steps {
+                        script {
+                            def builder_idx = 2
+
+                            echo "This is builder #${builder_idx} out of ${builders}"
+                            def suite = readYaml file: "${suitesDir}/${suiteYml}"
+                            echo "Suite YAML parsed to:\n\n${suite}"
+
+                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                        }
+                    }
+                }
+                stage("Builder 4") {
+                    agent {
+                        label 'indyperf'
+                    }
+                    steps {
+                        script {
+                            def builder_idx = 3
+
+                            echo "This is builder #${builder_idx} out of ${builders}"
+                            def suite = readYaml file: "${suitesDir}/${suiteYml}"
+                            echo "Suite YAML parsed to:\n\n${suite}"
+
+                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                        }
+                    }
+                }
+                stage("Builder 5") {
+                    agent {
+                        label 'indyperf'
+                    }
+                    steps {
+                        script {
+                            def builder_idx = 4
+
+                            echo "This is builder #${builder_idx} out of ${builders}"
+                            def suite = readYaml file: "${suitesDir}/${suiteYml}"
+                            echo "Suite YAML parsed to:\n\n${suite}"
+
+                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                        }
+                    }
+                }
+                stage("Builder 6") {
+                    agent {
+                        label 'indyperf'
+                    }
+                    steps {
+                        script {
+                            def builder_idx = 5
 
                             echo "This is builder #${builder_idx} out of ${builders}"
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"

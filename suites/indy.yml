@@ -7,6 +7,31 @@ builds:
     git-branch: weft-1.12
     mvn-args: "-DskipTests=true"
     times: 18
+  jhttpc:
+    git-url: https://github.com/Commonjava/jhttpc.git
+    git-branch: jhttpc-1.11
+    mvn-args: "-DskipTests=true"
+    times: 18
+  atlas:
+    git-url: https://github.com/Commonjava/atlas.git
+    git-branch: atlas-parent-1.1.0
+    mvn-args: "-DskipTests=true"
+    times: 18
+  auditquery:
+    git-url: https://github.com/Commonjava/auditquery.git
+    git-branch: auditquery-parent-0.13.1
+    mvn-args: "-DskipTests=true"
+    times: 18
+  rwx:
+    git-url: https://github.com/Commonjava/rwx.git
+    git-branch: rwx-parent-2.3
+    mvn-args: "-DskipTests=true"
+    times: 18
+  kojiji:
+    git-url: https://github.com/release-engineering/kojiji.git
+    git-branch: kojiji-2.9
+    mvn-args: "-DskipTests=true"
+    times: 18
   partyline:
     git-url: https://github.com/Commonjava/partyline.git
     git-branch: partyline-1.16

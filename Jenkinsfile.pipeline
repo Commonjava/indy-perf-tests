@@ -18,7 +18,7 @@ pipeline {
                     dir(envDir){
                         def foundFiles = findFiles(glob: "*.yml")
                         foundFiles.each{
-                            suiteNames << it.name
+                            envNames << it.name
                         }
 //                        def foundFiles = sh(script: "ls -1 *.yml", returnStdout: true).split("\n")
 //                        foundFiles.each{

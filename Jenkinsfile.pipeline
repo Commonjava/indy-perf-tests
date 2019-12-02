@@ -12,7 +12,21 @@ def envYml = null
 pipeline {
     agent { label 'python' }
     stages {
-        stage('Enter Parameters') {
+        stage('Collect Target Environments'){
+            steps {
+                script {
+                    dir(envDir){
+                        def foundFiles = sh(script: "ls -1 *.yml", returnStdout: true).split("\n")
+                        foundFiles.each{
+                            envNames << it.trim()
+                        }
+                    }
+
+                    echo "Got environment names: ${envNames}"
+                }
+            }
+        }
+        stage('Collect Test Suites') {
             steps {
                 script {
                     def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
@@ -20,14 +34,14 @@ pipeline {
                         suiteNames << it.name
                     }
 
-                    foundFiles = sh(script: "ls -1 ${envDir}/*.yml", returnStdout: true).split("\n")
-                    foundFiles.each{
-                        envNames << it.trim()
-                    }
-
                     echo "Got suite names: ${suiteNames}"
-                    echo "Got environment names: ${envNames}"
-                    
+                }
+
+            }
+        }
+        stage('Enter Parameters') {
+            steps {
+                script {
                     params = input(
                         message: "Please enter a test suite to run:",
                         parameters:[

@@ -1,8 +1,13 @@
 def params = []
 def suitesDir = "suites"
+def envDir = "/target"
+
 def suiteNames = []
+def envNames = []
+
 def builders = 6
 def suiteYml = null
+def envYml = null
 
 pipeline {
     agent { label 'python' }
@@ -15,14 +20,24 @@ pipeline {
                         suiteNames << it.name
                     }
 
+                    foundFiles = findFiles(glob: "${envDir}/*.yml")
+                    foundFiles.each{
+                        envNames << it.name
+                    }
+
                     echo "Got suite names: ${suiteNames}"
+                    echo "Got environment names: ${envNames}"
                     
-                    suiteYml = input(
+                    params = input(
                         message: "Please enter a test suite to run:",
                         parameters:[
                             choice(name: 'SUITE_YML', choices: suiteNames, description: "Test suite"),
+                            choice(name: 'ENV_YML', choices: envNames, description: "Target test environment"),
                         ]
                     )
+
+                    suiteYml = params['SUITE_YML']
+                    envYml = params['ENV_YML']
                 }
             }
         }

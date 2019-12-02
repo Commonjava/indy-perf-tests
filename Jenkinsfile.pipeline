@@ -20,9 +20,9 @@ pipeline {
                         suiteNames << it.name
                     }
 
-                    foundFiles = findFiles(glob: "${envDir}/*.yml")
+                    foundFiles = sh(script: "ls -1 ${envDir}/*.yml", returnStdout: true).readlines()
                     foundFiles.each{
-                        envNames << it.name
+                        envNames << it.trim()
                     }
 
                     echo "Got suite names: ${suiteNames}"

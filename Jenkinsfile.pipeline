@@ -15,17 +15,14 @@ pipeline {
         stage('Enter Parameters') {
             steps {
                 script {
-                    sh(script: 'df -h')
-                    sh(script: "ls -1 ${envDir}")
-
                     def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
                     foundFiles.each{
                         suiteNames << it.name
                     }
 
-                    foundFiles = sh(script: "ls -1 ${envDir}/*.yml", returnStdout: true).trim()
-                    foundFiles.eachLine{
-                        envNames << it.trim()
+                    def foundFiles = findFiles(glob: "${envDir}/*.yml")
+                    foundFiles.each{
+                        envNames << it.name
                     }
 
                     echo "Got suite names: ${suiteNames}"

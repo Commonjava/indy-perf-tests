@@ -1,6 +1,6 @@
 def params = []
 def suitesDir = "suites"
-def envDir = "/target"
+def envDir = "/home/jenkins/indy-targets"
 
 def suiteNames = []
 def envNames = []
@@ -17,7 +17,7 @@ pipeline {
                 script {
                     sh(script: 'df -h')
                     sh(script: 'ls -1 /target')
-                    
+
                     def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
                     foundFiles.each{
                         suiteNames << it.name
@@ -58,7 +58,7 @@ pipeline {
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                            sh script: "run-test ${envDir}/${envYml} ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
                         }
                     }
                 }

@@ -15,6 +15,9 @@ pipeline {
         stage('Enter Parameters') {
             steps {
                 script {
+                    sh(script: 'df -h')
+                    sh(script: 'ls -1 /target')
+                    
                     def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
                     foundFiles.each{
                         suiteNames << it.name

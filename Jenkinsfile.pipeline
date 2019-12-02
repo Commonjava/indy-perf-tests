@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     sh(script: 'df -h')
-                    sh(script: 'ls -1 /target')
+                    sh(script: "ls -1 ${envDir}")
 
                     def foundFiles = findFiles(glob: "${suitesDir}/*.yml")
                     foundFiles.each{

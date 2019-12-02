@@ -89,7 +89,7 @@ pipeline {
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                            sh script: "run-test ${envDir}/${envYml} ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
                         }
                     }
                 }
@@ -105,7 +105,7 @@ pipeline {
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                            sh script: "run-test ${envDir}/${envYml} ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
                         }
                     }
                 }
@@ -121,7 +121,7 @@ pipeline {
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                            sh script: "run-test ${envDir}/${envYml} ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
                         }
                     }
                 }
@@ -137,7 +137,7 @@ pipeline {
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                            sh script: "run-test ${envDir}/${envYml} ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
                         }
                     }
                 }
@@ -153,7 +153,7 @@ pipeline {
                             def suite = readYaml file: "${suitesDir}/${suiteYml}"
                             echo "Suite YAML parsed to:\n\n${suite}"
 
-                            sh script: "run-test ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
+                            sh script: "run-test ${envDir}/${envYml} ${suitesDir}/${suiteYml} ${builder_idx} ${builders}"
                         }
                     }
                 }

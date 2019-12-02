@@ -16,10 +16,14 @@ pipeline {
             steps {
                 script {
                     dir(envDir){
-                        def foundFiles = sh(script: "ls -1 *.yml", returnStdout: true).split("\n")
+                        def foundFiles = findFiles(glob: "*.yml")
                         foundFiles.each{
-                            envNames << it.trim()
+                            suiteNames << it.name
                         }
+//                        def foundFiles = sh(script: "ls -1 *.yml", returnStdout: true).split("\n")
+//                        foundFiles.each{
+//                            envNames << it.trim()
+//                        }
                     }
 
                     echo "Got environment names: ${envNames}"

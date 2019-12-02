@@ -20,7 +20,7 @@ pipeline {
                         suiteNames << it.name
                     }
 
-                    def foundFiles = findFiles(glob: "${envDir}/*.yml")
+                    foundFiles = findFiles(glob: "${envDir}/*.yml")
                     foundFiles.each{
                         envNames << it.name
                     }
